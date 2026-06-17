@@ -38,6 +38,25 @@ services:
       timeout: 5s
       retries: 5
 
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    volumes:
+      - ./data/nginx/conf.d:/etc/nginx/conf.d
+      - ./data/nginx/html:/usr/share/nginx/html
+      - ./data/nginx/logs:/var/log/nginx 
+    networks:
+      - app-network
+    ports:
+      - "80:80"
+      - "443:443"
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 networks:
   app-network:
     driver: bridge
